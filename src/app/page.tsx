@@ -1,79 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-/* ─────────────── IMAGE URLS ─────────────── */
-const IMAGES = {
-  hero: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80',
-  about: 'https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=1200&q=80',
-  beachfrontVilla: 'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?w=800&q=80',
-  oceanSuite: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
-  gardenResidence: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
-  dining: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
-  wellness: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&q=80',
-  ocean: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=800&q=80',
-  location: 'https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=1200&q=80',
-};
+/* ─── Data ─── */
 
-/* ─────────────── RESIDENCE DATA ─────────────── */
-const RESIDENCES = [
-  {
-    name: 'Beachfront Villa',
-    type: 'Private Villa',
-    size: '380 sqm',
-    features: ['Private infinity pool', 'Direct beach access', 'Personal butler service', 'Outdoor rain shower'],
-    price: 'From $1,250,000',
-    image: IMAGES.beachfrontVilla,
-  },
-  {
-    name: 'Ocean Suite',
-    type: 'Luxury Suite',
-    size: '180 sqm',
-    features: ['Panoramic ocean views', 'Premium wet kitchen', 'Private terrace', 'Smart home system'],
-    price: 'From $680,000',
-    image: IMAGES.oceanSuite,
-  },
-  {
-    name: 'Garden Residence',
-    type: 'Residence',
-    size: '120 sqm',
-    features: ['Tropical garden patio', 'Open-plan living', 'Resort pool access', 'Concierge service'],
-    price: 'From $420,000',
-    image: IMAGES.gardenResidence,
-  },
-];
-
-/* ─────────────── AMENITY DATA ─────────────── */
-const AMENITIES = [
-  { icon: '🏖️', name: 'Beach Club', description: 'An exclusive beachfront haven with sun loungers, craft cocktails, and live acoustic evenings under the stars.' },
-  { icon: '🏊', name: 'Infinity Pool', description: 'A stunning 50-meter oceanfront pool that cascades into the horizon, blending seamlessly with the cerulean sea.' },
-  { icon: '🧖', name: 'Spa & Wellness', description: 'A tranquil sanctuary offering Balinese treatments, hydrotherapy circuits, and holistic wellness programs.' },
-  { icon: '🏄', name: 'Water Sports', description: 'Kayaking, paddle boarding, snorkeling, and sunset sailing curated by our expert marine activities team.' },
-  { icon: '🌅', name: 'Sunset Lounge', description: 'An elevated terrace bar offering panoramic sunset views, premium wines, and artisanal small plates.' },
-  { icon: '⛵', name: 'Private Marina', description: 'A 24-berth marina with concierge docking, fueling services, and island-hopping charter arrangements.' },
-];
-
-/* ─────────────── LIFESTYLE DATA ─────────────── */
-const LIFESTYLE = [
-  {
-    title: 'Coastal Dining',
-    description: 'Savor world-class cuisine at our oceanfront restaurants. From freshly caught seafood prepared by award-winning chefs to intimate sunset dinners on the beach, every meal becomes a cherished memory.',
-    image: IMAGES.dining,
-  },
-  {
-    title: 'Wellness Journeys',
-    description: 'Begin each day with sunrise yoga on the shore, followed by rejuvenating spa treatments using organic marine botanicals. Our wellness programs are designed to restore balance and elevate your everyday.',
-    image: IMAGES.wellness,
-  },
-  {
-    title: 'Ocean Adventures',
-    description: 'Dive into crystal-clear waters teeming with marine life, cruise to hidden coves aboard a private yacht, or master the waves with expert surf coaches. The ocean is your endless playground.',
-    image: IMAGES.ocean,
-  },
-];
-
-/* ─────────────── NAV LINKS ─────────────── */
-const NAV_LINKS = [
+const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Residences', href: '#residences' },
   { label: 'Amenities', href: '#amenities' },
@@ -82,153 +13,265 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-/* ═══════════════════════════════════════════
-   MAIN PAGE COMPONENT
-   ═══════════════════════════════════════════ */
-export default function CeruleanBayPage() {
+const residences = [
+  {
+    name: 'Beachfront Villa',
+    size: '380 sqm',
+    beds: 'Private Villa',
+    description:
+      'An expansive private sanctuary with direct beach access, infinity pool, personal butler service, and outdoor rain shower nestled among tropical gardens.',
+    image:
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+  },
+  {
+    name: 'Ocean Suite',
+    size: '180 sqm',
+    beds: 'Luxury Suite',
+    description:
+      'Panoramic ocean views frame every moment in this premium suite featuring a wet kitchen, private terrace, and intelligent smart home integration.',
+    image:
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
+  },
+  {
+    name: 'Garden Residence',
+    size: '120 sqm',
+    beds: 'Residence',
+    description:
+      'Tropical garden living with open-plan spaces, resort pool access, and dedicated concierge service. A refined retreat amid lush coastal landscapes.',
+    image:
+      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
+  },
+];
+
+const amenities = [
+  {
+    name: 'Beach Club',
+    description: 'Exclusive beachfront haven with sun loungers, craft cocktails, and live acoustic evenings.',
+    icon: '\u2261', // hamburger-like lines
+  },
+  {
+    name: 'Infinity Pool',
+    description: '50-meter oceanfront pool cascading into the horizon, blending with the cerulean sea.',
+    icon: '\u2248', // wave-like symbol
+  },
+  {
+    name: 'Spa & Wellness',
+    description: 'A tranquil sanctuary offering Balinese treatments, hydrotherapy, and holistic programs.',
+    icon: '\u2662', // diamond
+  },
+  {
+    name: 'Water Sports',
+    description: 'Kayaking, paddle boarding, snorkeling, and sunset sailing curated by marine experts.',
+    icon: '\u25B6', // play / sail
+  },
+  {
+    name: 'Sunset Lounge',
+    description: 'Elevated terrace bar with panoramic sunset views, premium wines, and artisanal plates.',
+    icon: '\u2606', // star
+  },
+  {
+    name: 'Private Marina',
+    description: '24-berth marina with concierge docking, fueling services, and island-hopping charters.',
+    icon: '\u2302', // anchor-like
+  },
+];
+
+const lifestyleBlocks = [
+  {
+    title: 'Coastal Dining',
+    description:
+      'Savor world-class cuisine at our oceanfront restaurants. From freshly caught seafood prepared by award-winning chefs to intimate sunset dinners on the beach, every meal becomes a cherished memory.',
+    image:
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+  },
+  {
+    title: 'Wellness Journeys',
+    description:
+      'Begin each day with sunrise yoga on the shore, followed by rejuvenating spa treatments using organic marine botanicals. Our wellness programs restore balance and elevate your everyday.',
+    image:
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
+  },
+  {
+    title: 'Ocean Adventures',
+    description:
+      'Dive into crystal-clear waters teeming with marine life, cruise to hidden coves aboard a private yacht, or master the waves with expert surf coaches. The ocean is your endless playground.',
+    image:
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80',
+  },
+];
+
+const stats = [
+  { value: '8', label: 'Hectares' },
+  { value: '45', label: 'Residences' },
+  { value: '2km', label: 'Coastline' },
+  { value: '5\u2605', label: 'Service' },
+];
+
+/* ─── Component ─── */
+
+export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    checkIn: '',
-    guests: '',
-    residenceType: '',
-  });
+  const [scrolled, setScrolled] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you for your inquiry. Our team will contact you within 24 hours.');
-    setFormData({ name: '', email: '', checkIn: '', guests: '', residenceType: '' });
+    setFormSubmitted(true);
   };
 
   return (
-    <>
-      {/* ═══════════════ NAVIGATION ═══════════════ */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm nav-scrolled">
+    <main className="bg-white min-h-screen">
+
+      {/* ══════════════════════════════════════════════════════════════════
+          1. FIXED NAVIGATION
+      ══════════════════════════════════════════════════════════════════ */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur-md border-b border-[#0C2340]/5 shadow-[0_4px_24px_rgba(12,35,64,0.08)]'
+            : 'bg-white/80 backdrop-blur-sm'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
-            <a href="#" className="flex flex-col items-start">
-              <span className="font-serif text-2xl font-bold tracking-wide text-ocean">
+            <a
+              href="#"
+              className="flex flex-col"
+            >
+              <span className="font-[family-name:var(--font-cormorant)] text-[#0C2340] text-xl tracking-[0.2em] uppercase font-semibold">
                 CERULEAN BAY
               </span>
-              <span className="text-[10px] tracking-[0.35em] text-gold font-semibold uppercase -mt-1">
+              <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[9px] tracking-[0.35em] uppercase font-semibold -mt-0.5">
                 Beachfront Residences
               </span>
             </a>
 
             {/* Desktop Nav Links */}
-            <div className="hidden lg:flex items-center gap-8">
-              {NAV_LINKS.map((link) => (
+            <div className="hidden md:flex items-center gap-10">
+              {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium tracking-wide text-ocean/70 hover:text-cerulean transition-colors duration-300"
+                  className="font-[family-name:var(--font-source)] text-[#0C2340]/60 hover:text-[#2E86AB] text-xs tracking-[0.15em] uppercase transition-colors duration-300"
                 >
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#contact"
-                className="ml-4 px-6 py-2.5 bg-gold text-white text-sm font-semibold tracking-wider rounded hover:bg-gold-dark transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                Reserve
-              </a>
             </div>
+
+            {/* Desktop CTA */}
+            <a
+              href="#contact"
+              className="hidden md:inline-block px-6 py-2.5 bg-[#C4A265] text-white font-[family-name:var(--font-source)] text-xs tracking-[0.15em] uppercase hover:bg-[#A8894F] transition-all duration-300 rounded"
+            >
+              Reserve
+            </a>
 
             {/* Mobile Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+              className="md:hidden flex flex-col gap-1.5 p-2"
               aria-label="Toggle menu"
             >
               <span
-                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
-                  mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+                className={`block w-6 h-[1px] bg-[#0C2340] transition-all duration-300 ${
+                  mobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''
                 }`}
               />
               <span
-                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                className={`block w-6 h-[1px] bg-[#0C2340] transition-all duration-300 ${
                   mobileMenuOpen ? 'opacity-0' : ''
                 }`}
               />
               <span
-                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
-                  mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                className={`block w-6 h-[1px] bg-[#0C2340] transition-all duration-300 ${
+                  mobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''
                 }`}
               />
             </button>
           </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden pb-6 border-t border-ocean/10">
-              <div className="flex flex-col gap-4 pt-6">
-                {NAV_LINKS.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-base font-medium text-ocean/80 hover:text-cerulean transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-                <a
-                  href="#contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="mt-2 px-6 py-3 bg-gold text-white text-sm font-semibold tracking-wider rounded text-center hover:bg-gold-dark transition-colors"
-                >
-                  Reserve
-                </a>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
 
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-[family-name:var(--font-cormorant)] text-[#0C2340] text-2xl tracking-[0.2em] uppercase hover:text-[#2E86AB] transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-4 px-8 py-3 bg-[#C4A265] text-white font-[family-name:var(--font-source)] text-sm tracking-[0.15em] uppercase rounded"
+          >
+            Reserve
+          </a>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          2. HERO
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="relative h-screen overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src={IMAGES.hero}
+            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80"
             alt="Cerulean Bay beachfront luxury residences"
-            className="img-cover"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 hero-overlay" />
+          {/* Blue gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0C2340]/50 via-[#2E86AB]/20 to-[#0C2340]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0C2340]/30 via-transparent to-[#0C2340]/30" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <p className="text-gold font-semibold text-sm tracking-[0.35em] uppercase mb-6">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+          {/* Subtitle */}
+          <p className="font-[family-name:var(--font-source)] text-[#C4A265] text-sm tracking-[0.5em] uppercase mb-6 font-semibold">
             Beachfront Living
           </p>
-          <h1 className="font-serif text-white mb-2">
-            <span className="block text-7xl sm:text-8xl lg:text-9xl font-light tracking-tight">
-              CERULEAN
-            </span>
-            <span className="block text-5xl sm:text-6xl lg:text-7xl font-light tracking-[0.4em] mt-2">
-              BAY
-            </span>
+
+          {/* Main Title */}
+          <h1 className="font-[family-name:var(--font-cormorant)] text-white text-5xl md:text-7xl lg:text-8xl tracking-[0.2em] uppercase mb-2 font-light">
+            CERULEAN BAY
           </h1>
-          <p className="font-serif text-xl sm:text-2xl text-white/80 italic mt-6 mb-10">
+
+          {/* Gold Line */}
+          <div className="w-20 h-[1px] bg-[#C4A265] mb-8" />
+
+          {/* Tagline */}
+          <p className="font-[family-name:var(--font-cormorant)] text-white/80 text-lg md:text-xl italic mb-12 max-w-lg">
             Where the Ocean Meets Luxury
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <a
               href="#residences"
-              className="px-8 py-3.5 bg-white text-ocean text-sm font-semibold tracking-wider rounded hover:bg-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+              className="px-8 py-3.5 bg-white text-[#0C2340] font-[family-name:var(--font-source)] text-xs tracking-[0.2em] uppercase hover:bg-white/90 transition-all duration-300 rounded"
             >
               Explore Residences
             </a>
             <a
               href="#contact"
-              className="px-8 py-3.5 border-2 border-white text-white text-sm font-semibold tracking-wider rounded hover:bg-white hover:text-ocean transition-all duration-300 hover:-translate-y-0.5"
+              className="px-8 py-3.5 border border-white text-white font-[family-name:var(--font-source)] text-xs tracking-[0.2em] uppercase hover:bg-white/10 transition-all duration-300 rounded"
             >
               Schedule a Visit
             </a>
@@ -236,140 +279,149 @@ export default function CeruleanBayPage() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-scroll-bounce">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-white/60 text-xs tracking-widest uppercase">Scroll</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-white/60">
-              <path d="M10 4 L10 16 M4 10 L10 16 L16 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3">
+          <span className="font-[family-name:var(--font-source)] text-white/60 text-[10px] tracking-[0.3em] uppercase">
+            Scroll
+          </span>
+          <div className="w-[1px] h-8 bg-gradient-to-b from-[#C4A265] to-transparent" />
         </div>
       </section>
 
-      {/* ═══════════════ ABOUT ═══════════════ */}
-      <section id="about" className="bg-white py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          3. ABOUT
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="about" className="py-24 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Left: Text */}
             <div>
-              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
-                Our Vision
-              </p>
-              <div className="gold-line mb-8" />
-              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
-                A Sanctuary<br />by the Sea
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-8 h-[1px] bg-[#C4A265]" />
+                <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
+                  Our Vision
+                </span>
+              </div>
+
+              <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2] mb-8">
+                A Sanctuary
+                <br />
+                <span className="italic text-[#2E86AB]">by the Sea</span>
               </h2>
-              <p className="text-ocean/70 text-lg leading-relaxed mb-6">
-                Nestled along a pristine stretch of coastline, Cerulean Bay is a rare collection of
-                beachfront residences where architectural elegance meets the raw beauty of nature.
-                Every detail has been crafted to honor the rhythm of the ocean.
+
+              <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm md:text-base leading-relaxed mb-6">
+                Nestled along a pristine stretch of coastline, Cerulean Bay is a
+                rare collection of beachfront residences where architectural
+                elegance meets the raw beauty of nature. Every detail has been
+                crafted to honor the rhythm of the ocean.
               </p>
-              <p className="text-ocean/70 text-lg leading-relaxed">
-                From the gentle lull of waves at dawn to the golden light of sunset reflecting off
-                your private terrace, life here unfolds at the pace of the tides. This is not simply
-                a home — it is a way of living that reconnects you with the elements.
+
+              <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm leading-relaxed mb-10">
+                From the gentle lull of waves at dawn to the golden light of
+                sunset reflecting off your private terrace, life here unfolds at
+                the pace of the tides. This is not simply a home &mdash; it is a
+                way of living that reconnects you with the elements.
               </p>
+
+              {/* Gold Accent Line */}
+              <div className="w-16 h-[1px] bg-[#C4A265]" />
             </div>
 
-            {/* Right: Image */}
+            {/* Right: Image with accent frame */}
             <div className="relative">
-              <div className="overflow-hidden rounded-lg shadow-[8px_8px_40px_rgba(46,134,171,0.15)]">
+              <div className="relative p-3 border border-[#2E86AB]/20 rounded-lg">
                 <img
-                  src={IMAGES.about}
-                  alt="Aerial view of Cerulean Bay coastline"
-                  className="img-cover aspect-[4/5] rounded-lg img-zoom"
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"
+                  alt="Luxury beachfront interior with ocean views"
+                  className="w-full h-auto aspect-[4/5] object-cover rounded-lg"
                 />
               </div>
-              {/* Decorative accent */}
-              <div className="absolute -bottom-4 -left-4 w-24 h-24 border-2 border-gold/30 rounded-lg -z-10" />
+              {/* Offset corner accents */}
+              <div className="absolute -top-2 -left-2 w-8 h-8 border-t border-l border-[#C4A265] rounded-tl-lg" />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b border-r border-[#C4A265] rounded-br-lg" />
             </div>
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-20 pt-16 border-t border-ocean/10">
-            {[
-              { value: '8', label: 'Hectares', suffix: '' },
-              { value: '45', label: 'Residences', suffix: '' },
-              { value: '2', label: 'Coastline', suffix: 'km' },
-              { value: '5', label: 'Star Service', suffix: '-Star' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="font-serif text-5xl lg:text-6xl font-light text-cerulean mb-2">
-                  {stat.value}
-                  {stat.suffix && <span className="text-3xl text-gold ml-1">{stat.suffix}</span>}
-                </p>
-                <p className="text-sm tracking-widest uppercase text-ocean/50 font-medium">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
+          <div className="mt-20 pt-16 border-t border-[#0C2340]/10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
+              {stats.map((stat, index) => (
+                <div
+                  key={stat.label}
+                  className={`text-center py-8 md:py-0 ${
+                    index < stats.length - 1
+                      ? 'md:border-r md:border-[#2E86AB]/20'
+                      : ''
+                  } ${
+                    index < 2 ? 'border-b md:border-b-0 border-[#2E86AB]/20' : ''
+                  }`}
+                >
+                  <span className="font-[family-name:var(--font-cormorant)] text-[#2E86AB] text-4xl md:text-5xl lg:text-6xl block mb-2">
+                    {stat.value}
+                  </span>
+                  <span className="font-[family-name:var(--font-source)] text-[#0C2340]/50 text-xs tracking-[0.2em] uppercase">
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Wave Divider: White to Seafoam */}
-      <div className="wave-divider-to-seafoam" />
-
-      {/* ═══════════════ RESIDENCES ═══════════════ */}
-      <section id="residences" className="bg-seafoam py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          4. RESIDENCES
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="residences" className="py-24 lg:py-32 bg-[#F0F7F4]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
-              The Collection
-            </p>
-            <div className="gold-line-center mb-8" />
-            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
-              Our Residences
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#C4A265]" />
+              <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
+                The Collection
+              </span>
+              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#C4A265]" />
+            </div>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2]">
+              Our <span className="italic text-[#2E86AB]">Residences</span>
             </h2>
           </div>
 
-          {/* Residence Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {RESIDENCES.map((residence) => (
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {residences.map((residence) => (
               <div
                 key={residence.name}
-                className="bg-white rounded-lg overflow-hidden card-hover shadow-sm"
+                className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-[0_20px_60px_rgba(46,134,171,0.12)] transition-all duration-500"
               >
-                {/* Card Image */}
-                <div className="overflow-hidden h-64">
+                {/* Image */}
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <img
                     src={residence.image}
                     alt={residence.name}
-                    className="img-cover h-full img-zoom"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C2340]/40 to-transparent" />
                 </div>
 
-                {/* Card Content */}
-                <div className="p-8">
-                  <h3 className="font-serif text-2xl text-ocean mb-2">{residence.name}</h3>
-                  <p className="text-sm text-ocean/50 tracking-wide mb-4">
-                    {residence.type} &middot; {residence.size}
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-xl text-[#0C2340] mb-2">
+                    {residence.name}
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#2E86AB] text-xs tracking-[0.1em] mb-4">
+                    {residence.beds} &middot; {residence.size}
                   </p>
-
-                  {/* Features */}
-                  <ul className="space-y-2 mb-6">
-                    {residence.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3 text-sm text-ocean/70">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cerulean flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Price & CTA */}
-                  <div className="flex items-center justify-between pt-4 border-t border-ocean/10">
-                    <p className="font-serif text-lg text-ocean font-semibold">{residence.price}</p>
-                    <a
-                      href="#contact"
-                      className="text-gold font-semibold text-sm tracking-wide hover:text-gold-dark transition-colors group"
-                    >
-                      Explore
-                      <span className="inline-block ml-1 transition-transform duration-300 group-hover:translate-x-1">
-                        &rarr;
-                      </span>
-                    </a>
-                  </div>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm leading-relaxed mb-6">
+                    {residence.description}
+                  </p>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 font-[family-name:var(--font-source)] text-[#C4A265] text-xs tracking-[0.15em] uppercase font-semibold hover:gap-3 transition-all duration-300"
+                  >
+                    Explore
+                    <span className="text-sm">&rarr;</span>
+                  </a>
                 </div>
               </div>
             ))}
@@ -377,81 +429,94 @@ export default function CeruleanBayPage() {
         </div>
       </section>
 
-      {/* Wave Divider: Seafoam to White */}
-      <div className="wave-divider-to-white" />
-
-      {/* ═══════════════ AMENITIES ═══════════════ */}
-      <section id="amenities" className="bg-white py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          5. AMENITIES
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="amenities" className="py-24 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
-              World-Class Facilities
-            </p>
-            <div className="gold-line-center mb-8" />
-            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
-              Resort Amenities
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#C4A265]" />
+              <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
+                World-Class Facilities
+              </span>
+              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#C4A265]" />
+            </div>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2]">
+              Resort <span className="italic text-[#2E86AB]">Amenities</span>
             </h2>
           </div>
 
-          {/* Amenities Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {AMENITIES.map((amenity) => (
+          {/* 2x3 Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {amenities.map((amenity) => (
               <div
                 key={amenity.name}
-                className="text-center p-8 rounded-lg border border-ocean/5 hover:border-cerulean/20 hover:bg-seafoam/50 transition-all duration-400 card-hover"
+                className="bg-[#F0F7F4] border border-[#0C2340]/5 p-8 rounded-lg hover:border-[#2E86AB]/30 transition-colors duration-500"
               >
-                <div className="text-5xl mb-5">{amenity.icon}</div>
-                <h3 className="font-serif text-xl text-ocean mb-3">{amenity.name}</h3>
-                <p className="text-ocean/60 text-sm leading-relaxed">{amenity.description}</p>
+                {/* Icon */}
+                <div className="w-12 h-12 border border-[#2E86AB]/40 rounded-full flex items-center justify-center mb-6">
+                  <span className="text-[#2E86AB] text-xl">{amenity.icon}</span>
+                </div>
+
+                {/* Name */}
+                <h3 className="font-[family-name:var(--font-cormorant)] text-lg text-[#0C2340] mb-3">
+                  {amenity.name}
+                </h3>
+
+                {/* Description */}
+                <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm leading-relaxed">
+                  {amenity.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Wave Divider: White to Seafoam */}
-      <div className="wave-divider-to-seafoam" />
-
-      {/* ═══════════════ LIFESTYLE ═══════════════ */}
-      <section id="lifestyle" className="bg-seafoam py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          6. LIFESTYLE
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="lifestyle" className="py-24 lg:py-32 bg-[#F0F7F4]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
           <div className="text-center mb-20">
-            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
-              Live Beautifully
-            </p>
-            <div className="gold-line-center mb-8" />
-            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
-              The Cerulean Lifestyle
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#C4A265]" />
+              <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
+                Live Beautifully
+              </span>
+              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#C4A265]" />
+            </div>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2]">
+              The Cerulean <span className="italic text-[#2E86AB]">Lifestyle</span>
             </h2>
           </div>
 
-          {/* Lifestyle Blocks */}
+          {/* 3 Alternating Blocks */}
           <div className="space-y-24">
-            {LIFESTYLE.map((item, index) => (
+            {lifestyleBlocks.map((item, index) => (
               <div
                 key={item.title}
-                className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
-                  index % 2 === 1 ? 'lg:direction-rtl' : ''
-                }`}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
               >
                 {/* Image */}
-                <div className={`overflow-hidden rounded-lg shadow-lg ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                <div className={`relative overflow-hidden rounded-lg ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="img-cover aspect-[3/2] rounded-lg img-zoom"
+                    className="w-full h-auto aspect-[3/2] object-cover rounded-lg transition-transform duration-700 hover:scale-105"
                   />
                 </div>
 
                 {/* Text */}
                 <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                  <div className="gold-line mb-6" />
-                  <h3 className="font-serif text-3xl sm:text-4xl font-light text-ocean mb-6">
+                  <div className="w-12 h-[1px] bg-[#C4A265] mb-6" />
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl text-[#0C2340] leading-[1.2] mb-6">
                     {item.title}
                   </h3>
-                  <p className="text-ocean/70 text-lg leading-relaxed">
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm md:text-base leading-relaxed">
                     {item.description}
                   </p>
                 </div>
@@ -461,55 +526,69 @@ export default function CeruleanBayPage() {
         </div>
       </section>
 
-      {/* Wave Divider: Seafoam to White */}
-      <div className="wave-divider-to-white" />
-
-      {/* ═══════════════ LOCATION ═══════════════ */}
-      <section id="location" className="bg-white py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          7. LOCATION
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="location" className="py-24 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Left: Image */}
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <img
-                src={IMAGES.location}
-                alt="Cerulean Bay tropical location"
-                className="img-cover aspect-[4/3] rounded-lg"
-              />
+            <div className="relative">
+              <div className="relative p-3 border border-[#2E86AB]/20 rounded-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
+                  alt="Cerulean Bay tropical coastline location"
+                  className="w-full h-auto aspect-[4/3] object-cover rounded-lg"
+                />
+              </div>
+              <div className="absolute -top-2 -left-2 w-8 h-8 border-t border-l border-[#C4A265] rounded-tl-lg" />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b border-r border-[#C4A265] rounded-br-lg" />
             </div>
 
             {/* Right: Info */}
             <div>
-              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
-                Prime Location
-              </p>
-              <div className="gold-line mb-8" />
-              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
-                Gateway to<br />Paradise
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-8 h-[1px] bg-[#C4A265]" />
+                <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
+                  Prime Location
+                </span>
+              </div>
+
+              <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2] mb-8">
+                Gateway to
+                <br />
+                <span className="italic text-[#2E86AB]">Paradise</span>
               </h2>
-              <p className="text-ocean/70 text-lg leading-relaxed mb-10">
-                Positioned on one of the most coveted stretches of coastline, Cerulean Bay offers
-                effortless access to both natural wonders and modern conveniences.
+
+              <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm md:text-base leading-relaxed mb-10">
+                Positioned on one of the most coveted stretches of coastline,
+                Cerulean Bay offers effortless access to both natural wonders
+                and modern conveniences.
               </p>
 
               {/* Proximity List */}
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {[
-                  { icon: '✈️', label: 'International Airport', time: '25 min drive' },
-                  { icon: '🏛️', label: 'Cultural Heritage Sites', time: '15 min drive' },
-                  { icon: '🏄', label: 'Premier Surf Spots', time: '10 min drive' },
-                  { icon: '⛳', label: 'Championship Golf Course', time: '20 min drive' },
-                  { icon: '🛍️', label: 'Boutique Shopping District', time: '12 min drive' },
-                  { icon: '🏥', label: 'International Hospital', time: '18 min drive' },
+                  { label: 'International Airport', time: '25 min drive' },
+                  { label: 'Cultural Heritage Sites', time: '15 min drive' },
+                  { label: 'Premier Surf Spots', time: '10 min drive' },
+                  { label: 'Championship Golf Course', time: '20 min drive' },
+                  { label: 'Boutique Shopping District', time: '12 min drive' },
+                  { label: 'International Hospital', time: '18 min drive' },
                 ].map((place) => (
                   <div
                     key={place.label}
-                    className="flex items-center gap-4 pb-4 border-b border-ocean/5 last:border-0 last:pb-0"
+                    className="flex items-center justify-between pb-4 border-b border-[#0C2340]/5 last:border-0 last:pb-0"
                   >
-                    <span className="text-2xl w-10 text-center flex-shrink-0">{place.icon}</span>
-                    <div className="flex-1">
-                      <p className="text-ocean font-medium">{place.label}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#2E86AB]" />
+                      <span className="font-[family-name:var(--font-source)] text-[#0C2340] text-sm">
+                        {place.label}
+                      </span>
                     </div>
-                    <p className="text-cerulean text-sm font-medium">{place.time}</p>
+                    <span className="font-[family-name:var(--font-source)] text-[#2E86AB] text-sm font-medium">
+                      {place.time}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -518,240 +597,262 @@ export default function CeruleanBayPage() {
         </div>
       </section>
 
-      {/* Wave Divider: White to Seafoam */}
-      <div className="wave-divider-to-seafoam" />
-
-      {/* ═══════════════ CONTACT ═══════════════ */}
-      <section id="contact" className="bg-seafoam py-24 lg:py-32">
+      {/* ══════════════════════════════════════════════════════════════════
+          8. CONTACT
+      ══════════════════════════════════════════════════════════════════ */}
+      <section id="contact" className="py-24 lg:py-32 bg-[#F0F7F4]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Left: Contact Info */}
-            <div>
-              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#C4A265]" />
+              <span className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase font-semibold">
                 Get in Touch
-              </p>
-              <div className="gold-line mb-8" />
-              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
-                Begin Your<br />Journey
-              </h2>
-              <p className="text-ocean/70 text-lg leading-relaxed mb-12">
-                Our dedicated team is ready to guide you through the Cerulean Bay experience.
-                Schedule a private tour or request a comprehensive brochure.
-              </p>
+              </span>
+              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#C4A265]" />
+            </div>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl md:text-4xl lg:text-5xl text-[#0C2340] leading-[1.2] mb-4">
+              Begin Your <span className="italic text-[#2E86AB]">Journey</span>
+            </h2>
+            <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm max-w-lg mx-auto">
+              Our dedicated team is ready to guide you through the Cerulean Bay
+              experience. Schedule a private tour or request a comprehensive brochure.
+            </p>
+          </div>
 
-              <div className="space-y-6">
+          {/* Two Columns: Info + Form */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            {/* Left: Contact Info */}
+            <div className="flex flex-col justify-center">
+              <div className="space-y-8">
                 {/* Address */}
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-cerulean text-lg">📍</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-ocean mb-1">Visit Us</p>
-                    <p className="text-ocean/60 text-sm leading-relaxed">
-                      Cerulean Bay Estate<br />
-                      Jl. Pantai Indah No. 1<br />
-                      Bali, Indonesia 80361
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-3 font-semibold">
+                    Visit Us
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340] text-sm leading-relaxed">
+                    Cerulean Bay Estate
+                    <br />
+                    Jl. Pantai Indah No. 1
+                    <br />
+                    Bali, Indonesia 80361
+                  </p>
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-cerulean text-lg">📞</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-ocean mb-1">Call Us</p>
-                    <p className="text-ocean/60 text-sm">+62 361 888 8888</p>
-                  </div>
+                <div>
+                  <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-3 font-semibold">
+                    Phone
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340] text-sm">
+                    +62 361 888 8888
+                  </p>
                 </div>
 
                 {/* Email */}
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-cerulean text-lg">✉️</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-ocean mb-1">Email Us</p>
-                    <p className="text-ocean/60 text-sm">residences@ceruleanbay.com</p>
-                  </div>
+                <div>
+                  <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-3 font-semibold">
+                    Email
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340] text-sm">
+                    residences@ceruleanbay.com
+                  </p>
+                </div>
+
+                {/* Hours */}
+                <div>
+                  <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-3 font-semibold">
+                    Viewing Hours
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340] text-sm">
+                    By Appointment Only
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Right: Form */}
             <div>
-              <form
-                onSubmit={handleSubmit}
-                className="bg-white rounded-lg p-8 lg:p-10 shadow-[0_8px_40px_rgba(12,35,64,0.06)]"
-              >
-                <h3 className="font-serif text-2xl text-ocean mb-8">Request Information</h3>
-
-                <div className="space-y-5">
+              {!formSubmitted ? (
+                <form
+                  onSubmit={handleFormSubmit}
+                  className="bg-white border border-[#0C2340]/5 p-8 md:p-10 rounded-lg shadow-[0_8px_40px_rgba(12,35,64,0.06)]"
+                >
                   {/* Name */}
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-ocean/80 mb-2">
+                  <div className="mb-6">
+                    <label className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-[10px] tracking-[0.2em] uppercase block mb-2">
                       Full Name
                     </label>
                     <input
                       type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleFormChange}
                       required
-                      placeholder="Your full name"
-                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                      placeholder="Enter your full name"
+                      className="w-full bg-transparent border-b border-[#0C2340]/10 focus:border-[#2E86AB] text-[#0C2340] font-[family-name:var(--font-source)] text-sm py-3 outline-none transition-colors placeholder:text-[#0C2340]/30"
                     />
                   </div>
 
                   {/* Email */}
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-ocean/80 mb-2">
+                  <div className="mb-6">
+                    <label className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-[10px] tracking-[0.2em] uppercase block mb-2">
                       Email Address
                     </label>
                     <input
                       type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleFormChange}
                       required
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                      className="w-full bg-transparent border-b border-[#0C2340]/10 focus:border-[#2E86AB] text-[#0C2340] font-[family-name:var(--font-source)] text-sm py-3 outline-none transition-colors placeholder:text-[#0C2340]/30"
                     />
                   </div>
 
-                  {/* Check-in Date */}
-                  <div>
-                    <label htmlFor="checkIn" className="block text-sm font-medium text-ocean/80 mb-2">
-                      Preferred Visit Date
+                  {/* Phone */}
+                  <div className="mb-6">
+                    <label className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-[10px] tracking-[0.2em] uppercase block mb-2">
+                      Phone Number
                     </label>
                     <input
-                      type="date"
-                      id="checkIn"
-                      name="checkIn"
-                      value={formData.checkIn}
-                      onChange={handleFormChange}
-                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white form-input"
+                      type="tel"
+                      required
+                      placeholder="+62 812 3456 7890"
+                      className="w-full bg-transparent border-b border-[#0C2340]/10 focus:border-[#2E86AB] text-[#0C2340] font-[family-name:var(--font-source)] text-sm py-3 outline-none transition-colors placeholder:text-[#0C2340]/30"
                     />
                   </div>
 
-                  {/* Guests */}
-                  <div>
-                    <label htmlFor="guests" className="block text-sm font-medium text-ocean/80 mb-2">
-                      Number of Guests
+                  {/* Message */}
+                  <div className="mb-10">
+                    <label className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-[10px] tracking-[0.2em] uppercase block mb-2">
+                      Message
                     </label>
-                    <input
-                      type="number"
-                      id="guests"
-                      name="guests"
-                      value={formData.guests}
-                      onChange={handleFormChange}
-                      min="1"
-                      max="20"
-                      placeholder="2"
-                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                    <textarea
+                      rows={3}
+                      placeholder="Tell us about your ideal beachfront residence..."
+                      className="w-full bg-transparent border-b border-[#0C2340]/10 focus:border-[#2E86AB] text-[#0C2340] font-[family-name:var(--font-source)] text-sm py-3 outline-none transition-colors resize-none placeholder:text-[#0C2340]/30"
                     />
                   </div>
 
-                  {/* Residence Type */}
-                  <div>
-                    <label htmlFor="residenceType" className="block text-sm font-medium text-ocean/80 mb-2">
-                      Residence Type
-                    </label>
-                    <select
-                      id="residenceType"
-                      name="residenceType"
-                      value={formData.residenceType}
-                      onChange={handleFormChange}
-                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white form-input"
-                    >
-                      <option value="">Select a residence type</option>
-                      <option value="beachfront-villa">Beachfront Villa (380 sqm)</option>
-                      <option value="ocean-suite">Ocean Suite (180 sqm)</option>
-                      <option value="garden-residence">Garden Residence (120 sqm)</option>
-                    </select>
-                  </div>
-
-                  {/* Submit */}
+                  {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full mt-4 px-8 py-3.5 bg-gold text-white font-semibold text-sm tracking-wider rounded hover:bg-gold-dark transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                    className="w-full py-4 bg-[#C4A265] text-white font-[family-name:var(--font-source)] text-xs tracking-[0.2em] uppercase hover:bg-[#A8894F] transition-all duration-300 rounded hover:shadow-[0_0_30px_rgba(196,162,101,0.3)]"
                   >
                     Send Inquiry
                   </button>
+
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340]/30 text-[10px] mt-4 text-center">
+                    We respect your privacy. Your information will never be
+                    shared.
+                  </p>
+                </form>
+              ) : (
+                <div className="bg-white border border-[#2E86AB]/30 p-8 md:p-10 rounded-lg flex flex-col items-center justify-center min-h-[460px] text-center">
+                  <div className="w-12 h-12 border border-[#2E86AB] rounded-full flex items-center justify-center mb-8">
+                    <span className="text-[#2E86AB] text-lg">
+                      &#10003;
+                    </span>
+                  </div>
+                  <h3 className="font-[family-name:var(--font-cormorant)] text-2xl text-[#0C2340] mb-4">
+                    Thank You
+                  </h3>
+                  <p className="font-[family-name:var(--font-source)] text-[#0C2340]/60 text-sm max-w-sm leading-relaxed">
+                    Your inquiry has been received. Our team will contact you
+                    within 24 hours to arrange your private viewing.
+                  </p>
+                  <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#C4A265] to-transparent mt-8" />
                 </div>
-              </form>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Wave Divider: Seafoam to Ocean */}
-      <div className="wave-divider-to-ocean" />
-
-      {/* ═══════════════ FOOTER ═══════════════ */}
-      <footer className="bg-ocean text-white/70 py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
-            {/* Col 1: Brand */}
+      {/* ══════════════════════════════════════════════════════════════════
+          9. FOOTER
+      ══════════════════════════════════════════════════════════════════ */}
+      <footer className="bg-[#0C2340] border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {/* Column 1: Brand */}
             <div>
-              <h4 className="font-serif text-2xl text-white font-semibold tracking-wide mb-2">
-                CERULEAN BAY
-              </h4>
-              <p className="text-gold text-xs tracking-[0.3em] uppercase mb-6">
+              <h3 className="font-[family-name:var(--font-cormorant)] text-white text-lg tracking-[0.2em] uppercase mb-1">
+                Cerulean Bay
+              </h3>
+              <p className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-4 font-semibold">
                 Beachfront Residences
               </p>
-              <p className="text-white/50 text-sm leading-relaxed">
-                A rare collection of oceanfront residences where modern luxury meets the timeless
-                beauty of the coast. Your sanctuary by the sea awaits.
+              <p className="font-[family-name:var(--font-source)] text-white/40 text-xs leading-relaxed">
+                A rare collection of oceanfront residences where modern luxury
+                meets the timeless beauty of the coast. Your sanctuary by the
+                sea awaits.
               </p>
             </div>
 
-            {/* Col 2: Quick Links */}
+            {/* Column 2: Quick Links */}
             <div>
-              <h5 className="text-gold text-xs tracking-[0.25em] uppercase font-semibold mb-6">
+              <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-6 font-semibold">
                 Quick Links
-              </h5>
+              </h3>
               <div className="space-y-3">
-                {NAV_LINKS.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="block text-sm text-white/50 hover:text-gold transition-colors duration-300"
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {['About', 'Residences', 'Amenities', 'Lifestyle', 'Location', 'Contact'].map(
+                  (link) => (
+                    <a
+                      key={link}
+                      href={`#${link.toLowerCase()}`}
+                      className="block font-[family-name:var(--font-source)] text-white/40 text-xs hover:text-[#C4A265] transition-colors duration-300"
+                    >
+                      {link}
+                    </a>
+                  )
+                )}
               </div>
             </div>
 
-            {/* Col 3: Contact */}
+            {/* Column 3: Contact */}
             <div>
-              <h5 className="text-gold text-xs tracking-[0.25em] uppercase font-semibold mb-6">
+              <h3 className="font-[family-name:var(--font-source)] text-[#C4A265] text-[10px] tracking-[0.3em] uppercase mb-6 font-semibold">
                 Contact
-              </h5>
-              <div className="space-y-3 text-sm text-white/50">
-                <p>Jl. Pantai Indah No. 1</p>
-                <p>Bali, Indonesia 80361</p>
-                <p className="pt-2">+62 361 888 8888</p>
-                <p>residences@ceruleanbay.com</p>
+              </h3>
+              <div className="space-y-3">
+                <p className="font-[family-name:var(--font-source)] text-white/40 text-xs">
+                  Cerulean Bay Estate
+                </p>
+                <p className="font-[family-name:var(--font-source)] text-white/40 text-xs">
+                  Jl. Pantai Indah No. 1
+                </p>
+                <p className="font-[family-name:var(--font-source)] text-white/40 text-xs">
+                  Bali, Indonesia 80361
+                </p>
+                <p className="font-[family-name:var(--font-source)] text-white/40 text-xs">
+                  +62 361 888 8888
+                </p>
+                <p className="font-[family-name:var(--font-source)] text-white/40 text-xs">
+                  residences@ceruleanbay.com
+                </p>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Bottom */}
-          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-white/30">
-              &copy; {new Date().getFullYear()} Cerulean Bay. All rights reserved.
-            </p>
-            <p className="text-xs text-white/30">
-              Made with <span className="text-gold">&hearts;</span> by Creativism
-            </p>
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="font-[family-name:var(--font-source)] text-white/30 text-[10px] tracking-[0.1em]">
+                &copy; 2026 Cerulean Bay. All rights reserved.
+              </p>
+              <p className="font-[family-name:var(--font-source)] text-white/30 text-[10px] tracking-[0.1em]">
+                Made with &#9829; by{' '}
+                <a
+                  href="https://creativism.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#C4A265]/50 hover:text-[#C4A265] transition-colors"
+                >
+                  Creativism
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </footer>
-    </>
+    </main>
   );
 }

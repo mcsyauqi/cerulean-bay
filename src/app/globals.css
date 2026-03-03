@@ -1,214 +1,103 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 
 @import "tailwindcss";
 
 @theme inline {
   --color-ocean: #0C2340;
-  --color-ocean-light: #1a3a5c;
+  --color-ocean-light: #1A3A5C;
   --color-cerulean: #2E86AB;
-  --color-cerulean-light: #3a9bc4;
-  --color-cerulean-dark: #236a88;
+  --color-cerulean-light: #3A9BC4;
   --color-gold: #C4A265;
-  --color-gold-light: #d4b87a;
-  --color-gold-dark: #a8894f;
+  --color-gold-light: #D4B87A;
+  --color-gold-dark: #A8894F;
   --color-seafoam: #F0F7F4;
-  --color-seafoam-dark: #dceee6;
-  --color-sand: #F5F0E8;
-  --font-serif: 'Cormorant', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Source Sans 3', 'Segoe UI', Roboto, sans-serif;
+  --color-seafoam-dark: #DCEEE6;
+
+  --font-cormorant: 'Cormorant', Georgia, serif;
+  --font-source: 'Source Sans 3', system-ui, sans-serif;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
+/* Base */
+body {
+  background-color: #FFFFFF;
+  color: #0C2340;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: var(--font-sans);
-  background-color: #ffffff;
-  color: var(--color-ocean);
-  line-height: 1.7;
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  line-height: 1.15;
-  font-weight: 600;
+/* Selection */
+::selection {
+  background-color: #2E86AB;
+  color: #FFFFFF;
 }
 
-/* ─── Scrollbar ─── */
+::-moz-selection {
+  background-color: #2E86AB;
+  color: #FFFFFF;
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F0F7F4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-cerulean);
+  background: #2E86AB;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-cerulean-dark);
+  background: #3A9BC4;
 }
 
-/* ─── Selection ─── */
-::selection {
-  background-color: var(--color-cerulean);
-  color: #ffffff;
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: #2E86AB #F0F7F4;
 }
 
-::-moz-selection {
-  background-color: var(--color-cerulean);
-  color: #ffffff;
-}
-
-/* ─── Wave Dividers ─── */
-.wave-divider-to-seafoam {
-  position: relative;
-  width: 100%;
-  height: 70px;
-  overflow: hidden;
-  background: #ffffff;
-}
-
-.wave-divider-to-seafoam::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -5%;
-  width: 110%;
-  height: 70px;
-  background: var(--color-seafoam);
-  clip-path: ellipse(55% 80% at 50% 100%);
-}
-
-.wave-divider-to-white {
-  position: relative;
-  width: 100%;
-  height: 70px;
-  overflow: hidden;
-  background: var(--color-seafoam);
-}
-
-.wave-divider-to-white::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -5%;
-  width: 110%;
-  height: 70px;
-  background: #ffffff;
-  clip-path: ellipse(55% 80% at 50% 100%);
-}
-
-.wave-divider-to-ocean {
-  position: relative;
-  width: 100%;
-  height: 70px;
-  overflow: hidden;
-  background: #ffffff;
-}
-
-.wave-divider-to-ocean::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -5%;
-  width: 110%;
-  height: 70px;
-  background: var(--color-ocean);
-  clip-path: ellipse(55% 80% at 50% 100%);
-}
-
-/* ─── Scroll Indicator ─── */
-@keyframes scrollBounce {
-  0%, 100% {
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(8px);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
 
-.animate-scroll-bounce {
-  animation: scrollBounce 2s ease-in-out infinite;
-}
-
-/* ─── Navigation Shadow ─── */
-.nav-scrolled {
-  box-shadow: 0 4px 24px rgba(12, 35, 64, 0.08);
-}
-
-/* ─── Card Hover ─── */
-.card-hover {
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(46, 134, 171, 0.12),
-              0 8px 24px rgba(12, 35, 64, 0.06);
-}
-
-/* ─── Image Hover Zoom ─── */
-.img-zoom {
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.img-zoom:hover {
-  transform: scale(1.05);
-}
-
-/* ─── Gold Line Accent ─── */
+/* Utility: gold divider lines */
 .gold-line {
   width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-gold), rgba(196, 162, 101, 0.3));
+  height: 1px;
+  background: #C4A265;
 }
 
 .gold-line-center {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(196, 162, 101, 0.3), var(--color-gold), rgba(196, 162, 101, 0.3));
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C4A265, transparent);
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ─── Form Inputs ─── */
-.form-input {
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: var(--color-cerulean);
-  box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.15);
-  outline: none;
-}
-
-/* ─── Hero Overlay ─── */
-.hero-overlay {
-  background: linear-gradient(
-    135deg,
-    rgba(12, 35, 64, 0.65) 0%,
-    rgba(46, 134, 171, 0.35) 100%
-  );
-}
-
-/* ─── Responsive Image Cover ─── */
-.img-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Animation utility */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
 }
