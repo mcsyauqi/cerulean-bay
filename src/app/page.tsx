@@ -7,7 +7,7 @@ const IMAGES = {
   hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80',
   resort1: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80',
   resort2: 'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80',
-  pool: 'https://images.unsplash.com/photo-1572331165267-854da2b021b1?w=800&q=80',
+  pool: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80',
   villa: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
   bedroom: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
   ocean: 'https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&q=80',
