@@ -1,26 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ocean: #0C4A6E;
+  --color-ocean-light: #164e63;
+  --color-sand: #F5E6D3;
+  --color-aqua: #06B6D4;
+  --color-coral: #F97316;
+  --color-seafoam: #E0F2FE;
+  --color-dark: #1E293B;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Nunito Sans', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-dark);
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Wave divider */
+.wave-divider {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+}
+
+.wave-divider::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: var(--color-sand);
+  clip-path: ellipse(55% 70% at 50% 100%);
+}
+
+.wave-divider-reverse {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  background: var(--color-sand);
+}
+
+.wave-divider-reverse::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #ffffff;
+  clip-path: ellipse(55% 70% at 50% 0%);
+}
+
+/* Scroll-triggered nav shadow */
+.nav-scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth card hover */
+.villa-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.villa-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(12, 74, 110, 0.15);
+}
+
+/* Experience card hover */
+.experience-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(12, 74, 110, 0.12);
+}
+
+.experience-card:hover .experience-title {
+  color: var(--color-coral);
+}
+
+/* Form input focus */
+.form-input {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: var(--color-aqua);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+  outline: none;
+}
+
+/* Subtle fade-in animation on load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+
+/* Hero text animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+/* Stat counter subtle pulse */
+@keyframes subtlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* CTA button hover */
+.cta-button {
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(6, 182, 212, 0.3);
+}
+
+/* Submit button */
+.submit-button {
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #083a57;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(12, 74, 110, 0.3);
+}
+
+/* Responsive image cover */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Quote section parallax-like overlay */
+.quote-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(12, 74, 110, 0.85) 0%,
+    rgba(12, 74, 110, 0.4) 50%,
+    rgba(12, 74, 110, 0.2) 100%
+  );
 }
