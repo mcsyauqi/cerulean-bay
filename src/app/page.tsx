@@ -1,22 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 /* ─────────────── IMAGE URLS ─────────────── */
 const IMAGES = {
-  hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80',
-  aerial: 'https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=1200&q=80',
+  hero: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=80',
+  about: 'https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=1200&q=80',
   beachfrontVilla: 'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?w=800&q=80',
   oceanSuite: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
   gardenResidence: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
-  beachClub: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80',
-  infinityPool: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=800&q=80',
-  spa: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
-  waterSports: 'https://images.unsplash.com/photo-1530053969600-caed2596d242?w=800&q=80',
   dining: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
   wellness: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&q=80',
-  activities: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=800&q=80',
-  sunset: 'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=1200&q=80',
+  ocean: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=800&q=80',
   location: 'https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=1200&q=80',
 };
 
@@ -24,538 +19,355 @@ const IMAGES = {
 const RESIDENCES = [
   {
     name: 'Beachfront Villa',
-    tagline: 'Steps from the shore',
-    size: '480 sqm',
-    bedrooms: '4 Bedrooms',
-    features: ['Private infinity pool', 'Direct beach access', 'Personal butler', 'Outdoor rain shower'],
-    price: 'From $1,200/night',
+    type: 'Private Villa',
+    size: '380 sqm',
+    features: ['Private infinity pool', 'Direct beach access', 'Personal butler service', 'Outdoor rain shower'],
+    price: 'From $1,250,000',
     image: IMAGES.beachfrontVilla,
   },
   {
     name: 'Ocean Suite',
-    tagline: 'Panoramic sea views',
-    size: '220 sqm',
-    bedrooms: '2 Bedrooms',
-    features: ['Floor-to-ceiling windows', 'Private terrace', 'Plunge pool', 'In-suite dining'],
-    price: 'From $780/night',
+    type: 'Luxury Suite',
+    size: '180 sqm',
+    features: ['Panoramic ocean views', 'Premium wet kitchen', 'Private terrace', 'Smart home system'],
+    price: 'From $680,000',
     image: IMAGES.oceanSuite,
   },
   {
     name: 'Garden Residence',
-    tagline: 'Tropical sanctuary',
-    size: '320 sqm',
-    bedrooms: '3 Bedrooms',
-    features: ['Lush tropical gardens', 'Open-air living pavilion', 'Courtyard pool', 'Meditation deck'],
-    price: 'From $650/night',
+    type: 'Residence',
+    size: '120 sqm',
+    features: ['Tropical garden patio', 'Open-plan living', 'Resort pool access', 'Concierge service'],
+    price: 'From $420,000',
     image: IMAGES.gardenResidence,
   },
 ];
 
-/* ─────────────── AMENITIES DATA ─────────────── */
+/* ─────────────── AMENITY DATA ─────────────── */
 const AMENITIES = [
-  {
-    title: 'Beach Club',
-    description: 'A stylish oceanfront retreat with day beds, curated cocktails, and live sunset sessions.',
-    image: IMAGES.beachClub,
-    icon: '\u{2600}\u{FE0F}',
-  },
-  {
-    title: 'Infinity Pool',
-    description: 'A 50-metre horizon-edge pool that dissolves into the cerulean sea beyond.',
-    image: IMAGES.infinityPool,
-    icon: '\u{1F30A}',
-  },
-  {
-    title: 'Spa & Wellness',
-    description: 'Traditional healing arts meet modern therapies in our oceanfront spa sanctuary.',
-    image: IMAGES.spa,
-    icon: '\u{1F9D8}',
-  },
-  {
-    title: 'Water Sports',
-    description: 'Snorkeling, kayaking, paddle boarding, and sunset sailing from our private marina.',
-    image: IMAGES.waterSports,
-    icon: '\u{1F3C4}',
-  },
+  { icon: '🏖️', name: 'Beach Club', description: 'An exclusive beachfront haven with sun loungers, craft cocktails, and live acoustic evenings under the stars.' },
+  { icon: '🏊', name: 'Infinity Pool', description: 'A stunning 50-meter oceanfront pool that cascades into the horizon, blending seamlessly with the cerulean sea.' },
+  { icon: '🧖', name: 'Spa & Wellness', description: 'A tranquil sanctuary offering Balinese treatments, hydrotherapy circuits, and holistic wellness programs.' },
+  { icon: '🏄', name: 'Water Sports', description: 'Kayaking, paddle boarding, snorkeling, and sunset sailing curated by our expert marine activities team.' },
+  { icon: '🌅', name: 'Sunset Lounge', description: 'An elevated terrace bar offering panoramic sunset views, premium wines, and artisanal small plates.' },
+  { icon: '⛵', name: 'Private Marina', description: 'A 24-berth marina with concierge docking, fueling services, and island-hopping charter arrangements.' },
 ];
 
 /* ─────────────── LIFESTYLE DATA ─────────────── */
 const LIFESTYLE = [
   {
     title: 'Coastal Dining',
-    description: 'Three distinctive restaurants serving farm-to-ocean cuisine, from intimate beachside grills to refined degustation.',
+    description: 'Savor world-class cuisine at our oceanfront restaurants. From freshly caught seafood prepared by award-winning chefs to intimate sunset dinners on the beach, every meal becomes a cherished memory.',
     image: IMAGES.dining,
-    accent: 'Culinary',
   },
   {
     title: 'Wellness Journeys',
-    description: 'Sunrise yoga on the beach, guided meditation, holistic nutrition programs, and restorative sound healing.',
+    description: 'Begin each day with sunrise yoga on the shore, followed by rejuvenating spa treatments using organic marine botanicals. Our wellness programs are designed to restore balance and elevate your everyday.',
     image: IMAGES.wellness,
-    accent: 'Wellbeing',
   },
   {
-    title: 'Island Adventures',
-    description: 'Explore hidden coves, visit ancient temples, embark on guided reef dives, or cruise into the golden hour.',
-    image: IMAGES.activities,
-    accent: 'Discovery',
+    title: 'Ocean Adventures',
+    description: 'Dive into crystal-clear waters teeming with marine life, cruise to hidden coves aboard a private yacht, or master the waves with expert surf coaches. The ocean is your endless playground.',
+    image: IMAGES.ocean,
   },
 ];
 
-/* ─────────────── STATS DATA ─────────────── */
-const STATS = [
-  { value: '8', label: 'Hectares of Paradise' },
-  { value: '45', label: 'Private Residences' },
-  { value: '2 km', label: 'Pristine Coastline' },
-  { value: '5\u2605', label: 'World-Class Rating' },
+/* ─────────────── NAV LINKS ─────────────── */
+const NAV_LINKS = [
+  { label: 'About', href: '#about' },
+  { label: 'Residences', href: '#residences' },
+  { label: 'Amenities', href: '#amenities' },
+  { label: 'Lifestyle', href: '#lifestyle' },
+  { label: 'Location', href: '#location' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 /* ═══════════════════════════════════════════
    MAIN PAGE COMPONENT
    ═══════════════════════════════════════════ */
-export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
+export default function CeruleanBayPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    checkIn: '',
+    guests: '',
+    residenceType: '',
+  });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Thank you for your inquiry. Our team will contact you within 24 hours.');
+    setFormData({ name: '', email: '', checkIn: '', guests: '', residenceType: '' });
+  };
 
   return (
-    <div style={{ fontFamily: 'var(--font-body)' }}>
-
-      {/* ════════════════ NAVIGATION ════════════════ */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md nav-scrolled'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
-          {/* Logo */}
-          <a
-            href="#"
-            className="text-2xl tracking-widest transition-colors duration-300"
-            style={{
-              fontFamily: 'var(--font-heading)',
-              color: scrolled ? '#0C2340' : '#FFFFFF',
-              fontWeight: 600,
-            }}
-          >
-            CERULEAN BAY
-          </a>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {['Residences', 'Amenities', 'Lifestyle', 'Location', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-sm tracking-wider transition-colors duration-300"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  color: scrolled ? '#0C2340' : 'rgba(255,255,255,0.9)',
-                  fontWeight: 500,
-                  letterSpacing: '0.08em',
-                }}
-              >
-                {item}
-              </a>
-            ))}
-            <a
-              href="#contact"
-              className="btn-primary px-7 py-2.5 rounded-full text-sm tracking-wider"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-              }}
-            >
-              Reserve
+    <>
+      {/* ═══════════════ NAVIGATION ═══════════════ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm nav-scrolled">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <a href="#" className="flex flex-col items-start">
+              <span className="font-serif text-2xl font-bold tracking-wide text-ocean">
+                CERULEAN BAY
+              </span>
+              <span className="text-[10px] tracking-[0.35em] text-gold font-semibold uppercase -mt-1">
+                Beachfront Residences
+              </span>
             </a>
-          </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span
-              className={`block w-6 h-0.5 transition-all duration-300 ${
-                mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}
-              style={{ background: scrolled ? '#0C2340' : '#FFFFFF' }}
-            />
-            <span
-              className={`block w-6 h-0.5 transition-all duration-300 ${
-                mobileMenuOpen ? 'opacity-0' : ''
-              }`}
-              style={{ background: scrolled ? '#0C2340' : '#FFFFFF' }}
-            />
-            <span
-              className={`block w-6 h-0.5 transition-all duration-300 ${
-                mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}
-              style={{ background: scrolled ? '#0C2340' : '#FFFFFF' }}
-            />
-          </button>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 px-6 py-4">
-            {['Residences', 'Amenities', 'Lifestyle', 'Location', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="block py-3 text-sm tracking-wider"
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  color: '#0C2340',
-                  fontWeight: 500,
-                  letterSpacing: '0.08em',
-                }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item}
-              </a>
-            ))}
-            <a
-              href="#contact"
-              className="block mt-3 px-6 py-3 rounded-full text-sm text-white text-center tracking-wider"
-              style={{
-                background: '#2E86AB',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-              }}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Reserve
-            </a>
-          </div>
-        )}
-      </nav>
-
-      {/* ════════════════ HERO SECTION ════════════════ */}
-      <section className="relative h-screen w-full overflow-hidden">
-        {/* Background Image */}
-        <img
-          src={IMAGES.hero}
-          alt="Pristine tropical beach at Cerulean Bay"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1 }}
-        />
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 hero-overlay" />
-
-        {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 lg:px-12 pb-20 md:pb-28">
-          <div className="max-w-7xl mx-auto">
-            {/* Gold line accent */}
-            <div
-              className="mb-6 animate-fade-in"
-              style={{
-                width: '60px',
-                height: '2px',
-                background: 'linear-gradient(90deg, #C4A265, rgba(196,162,101,0.3))',
-              }}
-            />
-
-            {/* Location */}
-            <p
-              className="text-xs md:text-sm tracking-[0.35em] mb-4 animate-fade-in"
-              style={{
-                fontFamily: 'var(--font-body)',
-                color: 'rgba(255,255,255,0.7)',
-                fontWeight: 400,
-              }}
-            >
-              COASTAL LUXURY &middot; BALI &middot; INDONESIA
-            </p>
-
-            {/* Title */}
-            <h1
-              className="text-white text-5xl md:text-7xl lg:text-8xl leading-none mb-3 animate-fade-in"
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontWeight: 300,
-                letterSpacing: '0.02em',
-              }}
-            >
-              Cerulean Bay
-            </h1>
-            <p
-              className="text-xl md:text-2xl lg:text-3xl mb-8 animate-fade-in"
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontWeight: 300,
-                fontStyle: 'italic',
-                color: '#C4A265',
-              }}
-            >
-              Resort &amp; Residences
-            </p>
-
-            {/* Tagline */}
-            <p
-              className="text-sm md:text-base mb-10 max-w-lg animate-fade-in"
-              style={{
-                color: 'rgba(255,255,255,0.75)',
-                fontWeight: 300,
-                lineHeight: 1.7,
-              }}
-            >
-              Where the rhythm of the ocean orchestrates a life of extraordinary beauty,
-              and every horizon promises a new beginning.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 animate-fade-in">
-              <a
-                href="#about"
-                className="btn-outline inline-block px-8 py-3.5 rounded-full text-sm tracking-[0.15em]"
-                style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
-              >
-                Discover Paradise
-              </a>
+            {/* Desktop Nav Links */}
+            <div className="hidden lg:flex items-center gap-8">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium tracking-wide text-ocean/70 hover:text-cerulean transition-colors duration-300"
+                >
+                  {link.label}
+                </a>
+              ))}
               <a
                 href="#contact"
-                className="btn-gold inline-block px-8 py-3.5 rounded-full text-sm tracking-[0.15em]"
-                style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
+                className="ml-4 px-6 py-2.5 bg-gold text-white text-sm font-semibold tracking-wider rounded hover:bg-gold-dark transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
-                Reserve Now
+                Reserve
               </a>
             </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+              aria-label="Toggle menu"
+            >
+              <span
+                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                  mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                  mobileMenuOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-ocean transition-all duration-300 ${
+                  mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden pb-6 border-t border-ocean/10">
+              <div className="flex flex-col gap-4 pt-6">
+                {NAV_LINKS.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-base font-medium text-ocean/80 hover:text-cerulean transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mt-2 px-6 py-3 bg-gold text-white text-sm font-semibold tracking-wider rounded text-center hover:bg-gold-dark transition-colors"
+                >
+                  Reserve
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src={IMAGES.hero}
+            alt="Cerulean Bay beachfront luxury residences"
+            className="img-cover"
+          />
+          <div className="absolute inset-0 hero-overlay" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <p className="text-gold font-semibold text-sm tracking-[0.35em] uppercase mb-6">
+            Beachfront Living
+          </p>
+          <h1 className="font-serif text-white mb-2">
+            <span className="block text-7xl sm:text-8xl lg:text-9xl font-light tracking-tight">
+              CERULEAN
+            </span>
+            <span className="block text-5xl sm:text-6xl lg:text-7xl font-light tracking-[0.4em] mt-2">
+              BAY
+            </span>
+          </h1>
+          <p className="font-serif text-xl sm:text-2xl text-white/80 italic mt-6 mb-10">
+            Where the Ocean Meets Luxury
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="#residences"
+              className="px-8 py-3.5 bg-white text-ocean text-sm font-semibold tracking-wider rounded hover:bg-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+            >
+              Explore Residences
+            </a>
+            <a
+              href="#contact"
+              className="px-8 py-3.5 border-2 border-white text-white text-sm font-semibold tracking-wider rounded hover:bg-white hover:text-ocean transition-all duration-300 hover:-translate-y-0.5"
+            >
+              Schedule a Visit
+            </a>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-float">
-          <div
-            className="w-6 h-10 rounded-full border-2 flex items-start justify-center pt-2"
-            style={{ borderColor: 'rgba(255,255,255,0.4)' }}
-          >
-            <div
-              className="w-1 h-2.5 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.6)' }}
-            />
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-scroll-bounce">
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-white/60 text-xs tracking-widest uppercase">Scroll</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-white/60">
+              <path d="M10 4 L10 16 M4 10 L10 16 L16 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
         </div>
       </section>
 
-      {/* ════════════════ ABOUT CERULEAN BAY ════════════════ */}
-      <section id="about" className="py-20 lg:py-32 bg-white">
+      {/* ═══════════════ ABOUT ═══════════════ */}
+      <section id="about" className="bg-white py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-            {/* Left: Content */}
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            {/* Left: Text */}
             <div>
-              <p className="section-label mb-4">OUR PHILOSOPHY</p>
+              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+                Our Vision
+              </p>
               <div className="gold-line mb-8" />
-              <h2
-                className="section-heading text-3xl md:text-4xl lg:text-5xl mb-8"
-              >
-                A Life Shaped <br className="hidden md:block" />
-                by the Sea
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
+                A Sanctuary<br />by the Sea
               </h2>
-              <p
-                className="text-base md:text-lg leading-relaxed mb-6"
-                style={{ color: '#5a6a7a', fontWeight: 400 }}
-              >
-                Cerulean Bay is more than a destination -- it is a coastal philosophy.
-                Nestled along 2 kilometres of pristine beachfront, our 8-hectare sanctuary
-                offers a rare harmony between architectural refinement and the raw beauty
-                of the Indonesian archipelago.
+              <p className="text-ocean/70 text-lg leading-relaxed mb-6">
+                Nestled along a pristine stretch of coastline, Cerulean Bay is a rare collection of
+                beachfront residences where architectural elegance meets the raw beauty of nature.
+                Every detail has been crafted to honor the rhythm of the ocean.
               </p>
-              <p
-                className="text-base md:text-lg leading-relaxed mb-10"
-                style={{ color: '#5a6a7a', fontWeight: 400 }}
-              >
-                Every residence is designed to dissolve the boundary between interior and ocean,
-                with natural stone, aged teak, and floor-to-ceiling glass framing an endless horizon.
-                Here, luxury is not ostentation -- it is the gentle sound of waves at dawn, the warmth
-                of golden sand, and the freedom to simply be.
+              <p className="text-ocean/70 text-lg leading-relaxed">
+                From the gentle lull of waves at dawn to the golden light of sunset reflecting off
+                your private terrace, life here unfolds at the pace of the tides. This is not simply
+                a home — it is a way of living that reconnects you with the elements.
               </p>
-
-              {/* Stats Row */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {STATS.map((stat) => (
-                  <div key={stat.label}>
-                    <p
-                      className="text-2xl md:text-3xl mb-1"
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        color: '#2E86AB',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {stat.value}
-                    </p>
-                    <p
-                      className="text-xs tracking-wider"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        color: '#C4A265',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em',
-                      }}
-                    >
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Right: Image */}
             <div className="relative">
-              <div className="overflow-hidden rounded-2xl">
+              <div className="overflow-hidden rounded-lg shadow-[8px_8px_40px_rgba(46,134,171,0.15)]">
                 <img
-                  src={IMAGES.aerial}
-                  alt="Aerial view of Cerulean Bay Resort"
-                  className="w-full h-auto object-cover img-zoom"
-                  style={{ aspectRatio: '4/5', opacity: 1 }}
+                  src={IMAGES.about}
+                  alt="Aerial view of Cerulean Bay coastline"
+                  className="img-cover aspect-[4/5] rounded-lg img-zoom"
                 />
               </div>
-              {/* Gold accent corner */}
-              <div
-                className="absolute -bottom-4 -left-4 w-24 h-24 rounded-bl-2xl"
-                style={{ border: '2px solid #C4A265', borderTop: 'none', borderRight: 'none' }}
-              />
+              {/* Decorative accent */}
+              <div className="absolute -bottom-4 -left-4 w-24 h-24 border-2 border-gold/30 rounded-lg -z-10" />
             </div>
+          </div>
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-20 pt-16 border-t border-ocean/10">
+            {[
+              { value: '8', label: 'Hectares', suffix: '' },
+              { value: '45', label: 'Residences', suffix: '' },
+              { value: '2', label: 'Coastline', suffix: 'km' },
+              { value: '5', label: 'Star Service', suffix: '-Star' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="font-serif text-5xl lg:text-6xl font-light text-cerulean mb-2">
+                  {stat.value}
+                  {stat.suffix && <span className="text-3xl text-gold ml-1">{stat.suffix}</span>}
+                </p>
+                <p className="text-sm tracking-widest uppercase text-ocean/50 font-medium">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Wave Divider */}
+      {/* Wave Divider: White to Seafoam */}
       <div className="wave-divider-to-seafoam" />
 
-      {/* ════════════════ RESIDENCES ════════════════ */}
-      <section id="residences" className="py-20 lg:py-32 bg-pattern-seafoam">
+      {/* ═══════════════ RESIDENCES ═══════════════ */}
+      <section id="residences" className="bg-seafoam py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <p className="section-label mb-4">ACCOMMODATIONS</p>
+            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+              The Collection
+            </p>
             <div className="gold-line-center mb-8" />
-            <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl mb-4">
+            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
               Our Residences
             </h2>
-            <p
-              className="text-base md:text-lg max-w-2xl mx-auto"
-              style={{ color: '#5a6a7a', fontWeight: 400 }}
-            >
-              Three distinctive living experiences, each designed to celebrate
-              the unique character of coastal Bali.
-            </p>
           </div>
 
           {/* Residence Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-            {RESIDENCES.map((res) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {RESIDENCES.map((residence) => (
               <div
-                key={res.name}
-                className="card-hover bg-white rounded-2xl overflow-hidden"
-                style={{ boxShadow: '0 4px 20px rgba(46, 134, 171, 0.06)' }}
+                key={residence.name}
+                className="bg-white rounded-lg overflow-hidden card-hover shadow-sm"
               >
-                {/* Image */}
-                <div className="aspect-[4/3] overflow-hidden relative">
+                {/* Card Image */}
+                <div className="overflow-hidden h-64">
                   <img
-                    src={res.image}
-                    alt={res.name}
-                    className="w-full h-full object-cover img-zoom"
-                    style={{ opacity: 1 }}
+                    src={residence.image}
+                    alt={residence.name}
+                    className="img-cover h-full img-zoom"
                   />
-                  {/* Gold badge */}
-                  <div
-                    className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs tracking-wider"
-                    style={{
-                      background: 'rgba(196, 162, 101, 0.9)',
-                      color: '#FFFFFF',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 700,
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    {res.bedrooms}
-                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6 md:p-8">
-                  <p
-                    className="text-xs tracking-wider mb-2"
-                    style={{
-                      color: '#C4A265',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.15em',
-                    }}
-                  >
-                    {res.tagline}
-                  </p>
-                  <h3
-                    className="text-2xl mb-1"
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      color: '#0C2340',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {res.name}
-                  </h3>
-                  <p
-                    className="text-sm mb-5"
-                    style={{
-                      color: '#2E86AB',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {res.size}
+                {/* Card Content */}
+                <div className="p-8">
+                  <h3 className="font-serif text-2xl text-ocean mb-2">{residence.name}</h3>
+                  <p className="text-sm text-ocean/50 tracking-wide mb-4">
+                    {residence.type} &middot; {residence.size}
                   </p>
 
-                  {/* Features list */}
-                  <ul className="mb-6 space-y-2">
-                    {res.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-2 text-sm"
-                        style={{ color: '#5a6a7a' }}
-                      >
-                        <span style={{ color: '#C4A265', fontSize: '8px' }}>{'\u25C6'}</span>
+                  {/* Features */}
+                  <ul className="space-y-2 mb-6">
+                    {residence.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-3 text-sm text-ocean/70">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cerulean flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
                   </ul>
 
                   {/* Price & CTA */}
-                  <div className="flex items-center justify-between pt-5" style={{ borderTop: '1px solid #edf2f7' }}>
-                    <p
-                      className="text-sm"
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        color: '#0C2340',
-                        fontWeight: 600,
-                        fontSize: '1.05rem',
-                      }}
-                    >
-                      {res.price}
-                    </p>
+                  <div className="flex items-center justify-between pt-4 border-t border-ocean/10">
+                    <p className="font-serif text-lg text-ocean font-semibold">{residence.price}</p>
                     <a
                       href="#contact"
-                      className="text-sm tracking-wider transition-colors duration-300"
-                      style={{
-                        color: '#2E86AB',
-                        fontWeight: 600,
-                        letterSpacing: '0.05em',
-                      }}
+                      className="text-gold font-semibold text-sm tracking-wide hover:text-gold-dark transition-colors group"
                     >
-                      Explore &rarr;
+                      Explore
+                      <span className="inline-block ml-1 transition-transform duration-300 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
                     </a>
                   </div>
                 </div>
@@ -565,154 +377,83 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Wave Divider */}
+      {/* Wave Divider: Seafoam to White */}
       <div className="wave-divider-to-white" />
 
-      {/* ════════════════ RESORT AMENITIES ════════════════ */}
-      <section id="amenities" className="py-20 lg:py-32 bg-white">
+      {/* ═══════════════ AMENITIES ═══════════════ */}
+      <section id="amenities" className="bg-white py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <p className="section-label mb-4">RESORT AMENITIES</p>
-            <div className="gold-line-center mb-8" />
-            <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl mb-4">
-              Curated Experiences
-            </h2>
-            <p
-              className="text-base md:text-lg max-w-2xl mx-auto"
-              style={{ color: '#5a6a7a', fontWeight: 400 }}
-            >
-              World-class facilities designed to enrich every moment of your coastal retreat.
+            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+              World-Class Facilities
             </p>
+            <div className="gold-line-center mb-8" />
+            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
+              Resort Amenities
+            </h2>
           </div>
 
           {/* Amenities Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {AMENITIES.map((amenity) => (
               <div
-                key={amenity.title}
-                className="card-hover rounded-2xl overflow-hidden bg-white"
-                style={{
-                  boxShadow: '0 4px 20px rgba(46, 134, 171, 0.06)',
-                  border: '1px solid rgba(46, 134, 171, 0.08)',
-                }}
+                key={amenity.name}
+                className="text-center p-8 rounded-lg border border-ocean/5 hover:border-cerulean/20 hover:bg-seafoam/50 transition-all duration-400 card-hover"
               >
-                {/* Image */}
-                <div className="aspect-[16/9] overflow-hidden">
-                  <img
-                    src={amenity.image}
-                    alt={amenity.title}
-                    className="w-full h-full object-cover img-zoom"
-                    style={{ opacity: 1 }}
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="p-6 md:p-8">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl">{amenity.icon}</span>
-                    <h3
-                      className="text-xl md:text-2xl"
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        color: '#0C2340',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {amenity.title}
-                    </h3>
-                  </div>
-                  <p
-                    className="text-sm md:text-base leading-relaxed"
-                    style={{ color: '#5a6a7a', fontWeight: 400 }}
-                  >
-                    {amenity.description}
-                  </p>
-                </div>
+                <div className="text-5xl mb-5">{amenity.icon}</div>
+                <h3 className="font-serif text-xl text-ocean mb-3">{amenity.name}</h3>
+                <p className="text-ocean/60 text-sm leading-relaxed">{amenity.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ════════════════ LIFESTYLE SECTION ════════════════ */}
-      <section id="lifestyle" className="py-20 lg:py-32 bg-pattern-seafoam">
+      {/* Wave Divider: White to Seafoam */}
+      <div className="wave-divider-to-seafoam" />
+
+      {/* ═══════════════ LIFESTYLE ═══════════════ */}
+      <section id="lifestyle" className="bg-seafoam py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <p className="section-label mb-4">THE CERULEAN LIFESTYLE</p>
-            <div className="gold-line-center mb-8" />
-            <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl mb-4">
+          <div className="text-center mb-20">
+            <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
               Live Beautifully
-            </h2>
-            <p
-              className="text-base md:text-lg max-w-2xl mx-auto"
-              style={{ color: '#5a6a7a', fontWeight: 400 }}
-            >
-              A tapestry of dining, wellness, and adventure woven into the fabric of each day.
             </p>
+            <div className="gold-line-center mb-8" />
+            <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean">
+              The Cerulean Lifestyle
+            </h2>
           </div>
 
-          {/* Lifestyle Cards - Alternating layout */}
-          <div className="space-y-16 lg:space-y-24">
+          {/* Lifestyle Blocks */}
+          <div className="space-y-24">
             {LIFESTYLE.map((item, index) => (
               <div
                 key={item.title}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center ${
+                className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
                   index % 2 === 1 ? 'lg:direction-rtl' : ''
                 }`}
               >
                 {/* Image */}
-                <div className={`overflow-hidden rounded-2xl ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                <div className={`overflow-hidden rounded-lg shadow-lg ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full object-cover img-zoom"
-                    style={{ aspectRatio: '3/2', opacity: 1 }}
+                    className="img-cover aspect-[3/2] rounded-lg img-zoom"
                   />
                 </div>
 
-                {/* Content */}
+                {/* Text */}
                 <div className={index % 2 === 1 ? 'lg:order-1' : ''}>
-                  <p
-                    className="text-xs tracking-[0.25em] mb-3"
-                    style={{
-                      color: '#C4A265',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {item.accent}
-                  </p>
-                  <h3
-                    className="text-2xl md:text-3xl lg:text-4xl mb-6"
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      color: '#0C2340',
-                      fontWeight: 500,
-                      lineHeight: 1.2,
-                    }}
-                  >
+                  <div className="gold-line mb-6" />
+                  <h3 className="font-serif text-3xl sm:text-4xl font-light text-ocean mb-6">
                     {item.title}
                   </h3>
-                  <p
-                    className="text-base md:text-lg leading-relaxed mb-8"
-                    style={{ color: '#5a6a7a', fontWeight: 400 }}
-                  >
+                  <p className="text-ocean/70 text-lg leading-relaxed">
                     {item.description}
                   </p>
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center gap-2 text-sm tracking-wider transition-colors duration-300"
-                    style={{
-                      color: '#2E86AB',
-                      fontWeight: 600,
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    Learn More
-                    <span style={{ fontSize: '1.1em' }}>&rarr;</span>
-                  </a>
                 </div>
               </div>
             ))}
@@ -720,222 +461,119 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════ QUOTE / PARALLAX SECTION ════════════════ */}
-      <section className="relative w-full" style={{ height: '65vh', minHeight: '400px' }}>
-        <img
-          src={IMAGES.sunset}
-          alt="Golden sunset over the ocean at Cerulean Bay"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1 }}
-        />
-        <div className="absolute inset-0 quote-overlay" />
-        <div className="relative z-10 flex items-center justify-center h-full px-6">
-          <div className="max-w-3xl text-center">
-            <div
-              className="gold-line-center mb-8"
-              style={{ background: 'linear-gradient(90deg, rgba(196,162,101,0.2), #C4A265, rgba(196,162,101,0.2))' }}
-            />
-            <p
-              className="text-white text-2xl md:text-4xl lg:text-5xl leading-snug mb-6"
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontWeight: 400,
-                fontStyle: 'italic',
-              }}
-            >
-              &ldquo;Some places you visit. <br className="hidden md:block" />
-              Cerulean Bay, you feel.&rdquo;
-            </p>
-            <p
-              className="text-sm tracking-[0.25em]"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontWeight: 400,
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              &mdash; COND&Eacute; NAST TRAVELER
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Wave Divider: Seafoam to White */}
+      <div className="wave-divider-to-white" />
 
-      {/* ════════════════ LOCATION SECTION ════════════════ */}
-      <section id="location" className="py-20 lg:py-32 bg-white">
+      {/* ═══════════════ LOCATION ═══════════════ */}
+      <section id="location" className="bg-white py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Image */}
-            <div className="relative overflow-hidden rounded-2xl">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Image */}
+            <div className="overflow-hidden rounded-lg shadow-lg">
               <img
                 src={IMAGES.location}
-                alt="Beachfront location at Cerulean Bay"
-                className="w-full object-cover"
-                style={{ aspectRatio: '4/3', opacity: 1 }}
+                alt="Cerulean Bay tropical location"
+                className="img-cover aspect-[4/3] rounded-lg"
               />
-              {/* Location overlay card */}
-              <div
-                className="absolute bottom-6 left-6 right-6 md:right-auto md:max-w-xs p-5 rounded-xl"
-                style={{
-                  background: 'rgba(255,255,255,0.95)',
-                  backdropFilter: 'blur(12px)',
-                  boxShadow: '0 8px 32px rgba(12, 35, 64, 0.12)',
-                }}
-              >
-                <p
-                  className="text-xs tracking-wider mb-1"
-                  style={{ color: '#C4A265', fontWeight: 700 }}
-                >
-                  COORDINATES
-                </p>
-                <p
-                  className="text-sm"
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    color: '#0C2340',
-                    fontWeight: 500,
-                  }}
-                >
-                  8.8191&deg; S, 115.2311&deg; E
-                </p>
-              </div>
             </div>
 
-            {/* Content */}
+            {/* Right: Info */}
             <div>
-              <p className="section-label mb-4">BEACHFRONT PARADISE</p>
+              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+                Prime Location
+              </p>
               <div className="gold-line mb-8" />
-              <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl mb-8">
-                The Perfect <br className="hidden md:block" />
-                Address
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
+                Gateway to<br />Paradise
               </h2>
-              <p
-                className="text-base md:text-lg leading-relaxed mb-8"
-                style={{ color: '#5a6a7a', fontWeight: 400 }}
-              >
-                Positioned along Bali&apos;s celebrated southern coast, Cerulean Bay occupies
-                a coveted stretch of white-sand beach in Nusa Dua. The resort sits within
-                easy reach of world-class dining, ancient temples, and vibrant cultural experiences,
-                yet feels a world apart.
+              <p className="text-ocean/70 text-lg leading-relaxed mb-10">
+                Positioned on one of the most coveted stretches of coastline, Cerulean Bay offers
+                effortless access to both natural wonders and modern conveniences.
               </p>
 
-              {/* Location features */}
-              <div className="space-y-4 mb-10">
+              {/* Proximity List */}
+              <div className="space-y-5">
                 {[
-                  { label: 'Ngurah Rai International Airport', detail: '25 minutes' },
-                  { label: 'Uluwatu Temple', detail: '35 minutes' },
-                  { label: 'Seminyak & Canggu', detail: '45 minutes' },
-                  { label: 'Ubud Cultural Center', detail: '75 minutes' },
-                ].map((loc) => (
-                  <div key={loc.label} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid #edf2f7' }}>
-                    <p className="text-sm" style={{ color: '#0C2340', fontWeight: 500 }}>
-                      {loc.label}
-                    </p>
-                    <p className="text-sm" style={{ color: '#2E86AB', fontWeight: 600 }}>
-                      {loc.detail}
-                    </p>
+                  { icon: '✈️', label: 'International Airport', time: '25 min drive' },
+                  { icon: '🏛️', label: 'Cultural Heritage Sites', time: '15 min drive' },
+                  { icon: '🏄', label: 'Premier Surf Spots', time: '10 min drive' },
+                  { icon: '⛳', label: 'Championship Golf Course', time: '20 min drive' },
+                  { icon: '🛍️', label: 'Boutique Shopping District', time: '12 min drive' },
+                  { icon: '🏥', label: 'International Hospital', time: '18 min drive' },
+                ].map((place) => (
+                  <div
+                    key={place.label}
+                    className="flex items-center gap-4 pb-4 border-b border-ocean/5 last:border-0 last:pb-0"
+                  >
+                    <span className="text-2xl w-10 text-center flex-shrink-0">{place.icon}</span>
+                    <div className="flex-1">
+                      <p className="text-ocean font-medium">{place.label}</p>
+                    </div>
+                    <p className="text-cerulean text-sm font-medium">{place.time}</p>
                   </div>
                 ))}
               </div>
-
-              <a
-                href="#contact"
-                className="btn-primary inline-block px-8 py-3.5 rounded-full text-sm tracking-wider"
-                style={{ fontFamily: 'var(--font-body)', fontWeight: 600, letterSpacing: '0.1em' }}
-              >
-                Request Directions
-              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Wave Divider */}
+      {/* Wave Divider: White to Seafoam */}
       <div className="wave-divider-to-seafoam" />
 
-      {/* ════════════════ CONTACT / CTA SECTION ════════════════ */}
-      <section id="contact" className="py-20 lg:py-32 bg-pattern-seafoam">
+      {/* ═══════════════ CONTACT ═══════════════ */}
+      <section id="contact" className="bg-seafoam py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
-            {/* Left: Info */}
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Left: Contact Info */}
             <div>
-              <p className="section-label mb-4">BEGIN YOUR JOURNEY</p>
+              <p className="text-gold font-semibold text-xs tracking-[0.3em] uppercase mb-4">
+                Get in Touch
+              </p>
               <div className="gold-line mb-8" />
-              <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl mb-8">
-                Plan Your <br className="hidden md:block" />
-                Coastal Escape
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-ocean mb-8 leading-tight">
+                Begin Your<br />Journey
               </h2>
-              <p
-                className="text-base md:text-lg leading-relaxed mb-10"
-                style={{ color: '#5a6a7a', fontWeight: 400 }}
-              >
-                Our dedicated concierge team is here to craft your perfect Cerulean Bay experience.
-                From private airport transfers to bespoke itineraries, every detail
-                is attended to with the utmost care and discretion.
+              <p className="text-ocean/70 text-lg leading-relaxed mb-12">
+                Our dedicated team is ready to guide you through the Cerulean Bay experience.
+                Schedule a private tour or request a comprehensive brochure.
               </p>
 
-              {/* Contact Info */}
               <div className="space-y-6">
                 {/* Address */}
                 <div className="flex items-start gap-4">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#0C2340' }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-cerulean text-lg">📍</span>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: '#0C2340', fontWeight: 600 }}>
-                      Address
-                    </p>
-                    <p className="text-sm leading-relaxed" style={{ color: '#5a6a7a' }}>
-                      Jl. Pantai Cerulean No. 1<br />
-                      Nusa Dua, Bali 80363<br />
-                      Indonesia
+                    <p className="font-medium text-ocean mb-1">Visit Us</p>
+                    <p className="text-ocean/60 text-sm leading-relaxed">
+                      Cerulean Bay Estate<br />
+                      Jl. Pantai Indah No. 1<br />
+                      Bali, Indonesia 80361
                     </p>
                   </div>
                 </div>
 
                 {/* Phone */}
                 <div className="flex items-start gap-4">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#0C2340' }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-cerulean text-lg">📞</span>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: '#0C2340', fontWeight: 600 }}>
-                      Reservations
-                    </p>
-                    <p className="text-sm" style={{ color: '#5a6a7a' }}>
-                      +62 361 XXX XXXX
-                    </p>
+                    <p className="font-medium text-ocean mb-1">Call Us</p>
+                    <p className="text-ocean/60 text-sm">+62 361 888 8888</p>
                   </div>
                 </div>
 
                 {/* Email */}
                 <div className="flex items-start gap-4">
-                  <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#0C2340' }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-full bg-cerulean/10 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-cerulean text-lg">✉️</span>
                   </div>
                   <div>
-                    <p className="text-sm mb-1" style={{ color: '#0C2340', fontWeight: 600 }}>
-                      Email
-                    </p>
-                    <p className="text-sm" style={{ color: '#5a6a7a' }}>
-                      reservations@ceruleanbay.com
-                    </p>
+                    <p className="font-medium text-ocean mb-1">Email Us</p>
+                    <p className="text-ocean/60 text-sm">residences@ceruleanbay.com</p>
                   </div>
                 </div>
               </div>
@@ -944,301 +582,176 @@ export default function Home() {
             {/* Right: Form */}
             <div>
               <form
-                className="bg-white rounded-2xl p-8 md:p-10"
-                style={{ boxShadow: '0 8px 40px rgba(12, 35, 64, 0.08)' }}
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={handleSubmit}
+                className="bg-white rounded-lg p-8 lg:p-10 shadow-[0_8px_40px_rgba(12,35,64,0.06)]"
               >
-                <h3
-                  className="text-2xl mb-2"
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    color: '#0C2340',
-                    fontWeight: 600,
-                  }}
-                >
-                  Reserve Your Residence
-                </h3>
-                <p
-                  className="text-sm mb-8"
-                  style={{ color: '#5a6a7a', fontWeight: 400 }}
-                >
-                  Complete the form below and our concierge will be in touch within 24 hours.
-                </p>
+                <h3 className="font-serif text-2xl text-ocean mb-8">Request Information</h3>
 
-                {/* Full Name */}
-                <div className="mb-5">
-                  <label
-                    className="block text-xs tracking-wider mb-2"
-                    style={{ color: '#0C2340', fontWeight: 600 }}
-                  >
-                    FULL NAME
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    className="form-input w-full px-4 py-3 rounded-xl border text-sm"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      color: '#0C2340',
-                      borderColor: '#dce5ec',
-                    }}
-                  />
-                </div>
-
-                {/* Email */}
-                <div className="mb-5">
-                  <label
-                    className="block text-xs tracking-wider mb-2"
-                    style={{ color: '#0C2340', fontWeight: 600 }}
-                  >
-                    EMAIL ADDRESS
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    className="form-input w-full px-4 py-3 rounded-xl border text-sm"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      color: '#0C2340',
-                      borderColor: '#dce5ec',
-                    }}
-                  />
-                </div>
-
-                {/* Date & Guests Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div className="space-y-5">
+                  {/* Name */}
                   <div>
-                    <label
-                      className="block text-xs tracking-wider mb-2"
-                      style={{ color: '#0C2340', fontWeight: 600 }}
-                    >
-                      CHECK-IN DATE
+                    <label htmlFor="name" className="block text-sm font-medium text-ocean/80 mb-2">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleFormChange}
+                      required
+                      placeholder="Your full name"
+                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-ocean/80 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      required
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                    />
+                  </div>
+
+                  {/* Check-in Date */}
+                  <div>
+                    <label htmlFor="checkIn" className="block text-sm font-medium text-ocean/80 mb-2">
+                      Preferred Visit Date
                     </label>
                     <input
                       type="date"
-                      className="form-input w-full px-4 py-3 rounded-xl border text-sm"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        color: '#0C2340',
-                        borderColor: '#dce5ec',
-                      }}
+                      id="checkIn"
+                      name="checkIn"
+                      value={formData.checkIn}
+                      onChange={handleFormChange}
+                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white form-input"
                     />
                   </div>
+
+                  {/* Guests */}
                   <div>
-                    <label
-                      className="block text-xs tracking-wider mb-2"
-                      style={{ color: '#0C2340', fontWeight: 600 }}
-                    >
-                      GUESTS
+                    <label htmlFor="guests" className="block text-sm font-medium text-ocean/80 mb-2">
+                      Number of Guests
+                    </label>
+                    <input
+                      type="number"
+                      id="guests"
+                      name="guests"
+                      value={formData.guests}
+                      onChange={handleFormChange}
+                      min="1"
+                      max="20"
+                      placeholder="2"
+                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white placeholder:text-ocean/30 form-input"
+                    />
+                  </div>
+
+                  {/* Residence Type */}
+                  <div>
+                    <label htmlFor="residenceType" className="block text-sm font-medium text-ocean/80 mb-2">
+                      Residence Type
                     </label>
                     <select
-                      className="form-input w-full px-4 py-3 rounded-xl border text-sm appearance-none bg-white"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        color: '#0C2340',
-                        borderColor: '#dce5ec',
-                      }}
-                      defaultValue=""
+                      id="residenceType"
+                      name="residenceType"
+                      value={formData.residenceType}
+                      onChange={handleFormChange}
+                      className="w-full px-4 py-3 border border-ocean/15 rounded text-ocean text-sm bg-white form-input"
                     >
-                      <option value="" disabled>Select</option>
-                      <option value="1">1 Guest</option>
-                      <option value="2">2 Guests</option>
-                      <option value="3">3 Guests</option>
-                      <option value="4">4 Guests</option>
-                      <option value="5">5+ Guests</option>
+                      <option value="">Select a residence type</option>
+                      <option value="beachfront-villa">Beachfront Villa (380 sqm)</option>
+                      <option value="ocean-suite">Ocean Suite (180 sqm)</option>
+                      <option value="garden-residence">Garden Residence (120 sqm)</option>
                     </select>
                   </div>
-                </div>
 
-                {/* Residence Type */}
-                <div className="mb-5">
-                  <label
-                    className="block text-xs tracking-wider mb-2"
-                    style={{ color: '#0C2340', fontWeight: 600 }}
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    className="w-full mt-4 px-8 py-3.5 bg-gold text-white font-semibold text-sm tracking-wider rounded hover:bg-gold-dark transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
                   >
-                    PREFERRED RESIDENCE
-                  </label>
-                  <select
-                    className="form-input w-full px-4 py-3 rounded-xl border text-sm appearance-none bg-white"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      color: '#0C2340',
-                      borderColor: '#dce5ec',
-                    }}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>Select residence type</option>
-                    <option value="beachfront">Beachfront Villa</option>
-                    <option value="ocean">Ocean Suite</option>
-                    <option value="garden">Garden Residence</option>
-                  </select>
+                    Send Inquiry
+                  </button>
                 </div>
-
-                {/* Special Requests */}
-                <div className="mb-8">
-                  <label
-                    className="block text-xs tracking-wider mb-2"
-                    style={{ color: '#0C2340', fontWeight: 600 }}
-                  >
-                    SPECIAL REQUESTS
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="Any special requirements or celebrations..."
-                    className="form-input w-full px-4 py-3 rounded-xl border text-sm resize-none"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      color: '#0C2340',
-                      borderColor: '#dce5ec',
-                    }}
-                  />
-                </div>
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  className="w-full py-4 rounded-xl text-white text-sm tracking-[0.15em] transition-all duration-300"
-                  style={{
-                    background: '#0C2340',
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#2E86AB';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 8px 30px rgba(46, 134, 171, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#0C2340';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  RESERVE YOUR RESIDENCE
-                </button>
               </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════════════════ FOOTER ════════════════ */}
-      <footer style={{ background: '#0C2340' }} className="text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-            {/* Brand */}
-            <div className="md:col-span-2">
-              <h4
-                className="text-2xl tracking-wider mb-4"
-                style={{ fontFamily: 'var(--font-heading)', fontWeight: 500 }}
-              >
+      {/* Wave Divider: Seafoam to Ocean */}
+      <div className="wave-divider-to-ocean" />
+
+      {/* ═══════════════ FOOTER ═══════════════ */}
+      <footer className="bg-ocean text-white/70 py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Col 1: Brand */}
+            <div>
+              <h4 className="font-serif text-2xl text-white font-semibold tracking-wide mb-2">
                 CERULEAN BAY
               </h4>
-              <p
-                className="text-sm leading-relaxed max-w-sm mb-6"
-                style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}
-              >
-                A haven of coastal luxury in Nusa Dua, Bali. Where every moment is designed
-                for those who seek the extraordinary in the tranquil embrace of the sea.
+              <p className="text-gold text-xs tracking-[0.3em] uppercase mb-6">
+                Beachfront Residences
               </p>
-              <div
-                style={{
-                  width: '40px',
-                  height: '2px',
-                  background: '#C4A265',
-                }}
-              />
+              <p className="text-white/50 text-sm leading-relaxed">
+                A rare collection of oceanfront residences where modern luxury meets the timeless
+                beauty of the coast. Your sanctuary by the sea awaits.
+              </p>
             </div>
 
-            {/* Quick Links */}
+            {/* Col 2: Quick Links */}
             <div>
-              <h5
-                className="text-xs tracking-[0.2em] mb-6"
-                style={{
-                  fontWeight: 700,
-                  color: '#C4A265',
-                }}
-              >
-                EXPLORE
+              <h5 className="text-gold text-xs tracking-[0.25em] uppercase font-semibold mb-6">
+                Quick Links
               </h5>
-              <ul className="space-y-3">
-                {[
-                  { label: 'Residences', href: '#residences' },
-                  { label: 'Amenities', href: '#amenities' },
-                  { label: 'Lifestyle', href: '#lifestyle' },
-                  { label: 'Location', href: '#location' },
-                  { label: 'Reservations', href: '#contact' },
-                ].map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm transition-colors duration-300"
-                      style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}
-                      onMouseEnter={(e) => { e.currentTarget.style.color = '#2E86AB'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
+              <div className="space-y-3">
+                {NAV_LINKS.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="block text-sm text-white/50 hover:text-gold transition-colors duration-300"
+                  >
+                    {link.label}
+                  </a>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {/* Contact */}
+            {/* Col 3: Contact */}
             <div>
-              <h5
-                className="text-xs tracking-[0.2em] mb-6"
-                style={{
-                  fontWeight: 700,
-                  color: '#C4A265',
-                }}
-              >
-                CONTACT
+              <h5 className="text-gold text-xs tracking-[0.25em] uppercase font-semibold mb-6">
+                Contact
               </h5>
-              <div className="space-y-3 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                <p>
-                  Jl. Pantai Cerulean No. 1<br />
-                  Nusa Dua, Bali 80363
-                </p>
-                <p>+62 361 XXX XXXX</p>
-                <p>reservations@ceruleanbay.com</p>
+              <div className="space-y-3 text-sm text-white/50">
+                <p>Jl. Pantai Indah No. 1</p>
+                <p>Bali, Indonesia 80361</p>
+                <p className="pt-2">+62 361 888 8888</p>
+                <p>residences@ceruleanbay.com</p>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div
-            className="mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
-            style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            <p
-              className="text-xs"
-              style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}
-            >
-              &copy; 2026 Cerulean Bay Resort &amp; Residences. All rights reserved.
+          {/* Bottom */}
+          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-white/30">
+              &copy; {new Date().getFullYear()} Cerulean Bay. All rights reserved.
             </p>
-            <p
-              className="text-xs"
-              style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}
-            >
-              Made with &#9829; by{' '}
-              <a
-                href="https://creativism.id"
-                style={{ color: '#C4A265' }}
-                className="transition-colors duration-300"
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={(e) => { e.currentTarget.style.color = '#2E86AB'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = '#C4A265'; }}
-              >
-                Creativism
-              </a>
+            <p className="text-xs text-white/30">
+              Made with <span className="text-gold">&hearts;</span> by Creativism
             </p>
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
